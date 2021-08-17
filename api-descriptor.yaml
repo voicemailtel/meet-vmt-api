@@ -8,30 +8,30 @@ servers:
 
 paths:
   /api/check-api-key-validity:
-    get:
-      summary: Checks Api Key validity
-      parameters:
-        - in: header
-          name: ApiKey
-          schema:
-            type: string
-          required: true
-      tags:
-        - integrations
-      responses:
-        '200':
-          description: Gets room status
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/CheckApiKeyValiditySuccessResponse'
-        '401':
-          description: Api Key is missing or invalid
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/CheckApiKeyValidityUnauthorizedResponse'
-          
+      get:
+        summary: Checks Api Key validity
+        parameters:
+          - in: header
+            name: ApiKey
+            schema:
+              type: string
+            required: true
+        tags:
+          - zapier integration
+        responses:
+          '200':
+            description: Displays if Api Key is valid
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/CheckApiKeyValiditySuccessResponse'
+          '401':
+            description: Api Key is missing or invalid!
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/CheckApiKeyValidityUnauthorizedResponse'
+            
   /api/trigger-start-meeting:
     get:
       summary: Verifies if a meeting is started with personal meetin id
@@ -42,10 +42,10 @@ paths:
             type: string
           required: true
       tags:
-        - integrations
+        - zapier integration
       responses:
         '200':
-          description: Gets room status
+          description: Gets personal room status and displays a unique id if room is online!
           content:
             application/json:
               schema:
@@ -67,10 +67,10 @@ paths:
             type: string
           required: true
       tags:
-        - integrations
+        - zapier integration
       responses:
         '200':
-          description: Gets user contacts
+          description: Gets user contacts with unique id for each contact
           content:
             application/json:
               schema:
@@ -92,10 +92,10 @@ paths:
             type: string
           required: true
       tags:
-        - integrations
+        - zapier integration
       responses:
         '200':
-          description: Gets groups created by this user
+          description: Gets groups created by this user with unique id for each group
           content:
             application/json:
               schema:
@@ -117,23 +117,23 @@ paths:
             type: string
           required: true
       requestBody:
-        description: Schedul meeting input
+        description: Schedule meeting input
         required: true
         content: 
           application/json:
             schema:
               $ref: '#/components/schemas/ScheduleMeetingActionRequestBody'
       tags:
-        - integrations
+        - zapier integration
       responses:
         '200':
-          description: Schedules a Meeting
+          description: Schedules a Meeting with the input provided
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ScheduleMeetingActionSuccessResponse'
         '400':
-          description: Requeired parameters are missgin
+          description: Required parameters are missing!
           content:
             application/json:
               schema:
@@ -144,7 +144,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ScheduleMeetingActionUnauthorizedResponse'
-      
+        
 
 components:
   schemas:
@@ -279,7 +279,7 @@ components:
           example: 123123
         meetingStart:
           type: string
-          example: 2021-07-09T:15:00-05:00
+          example: 2021-08-17T16:00
         meetingDuration:
           type: integer
           example: 120
