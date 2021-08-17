@@ -1,0 +1,325 @@
+openapi: 3.0.0
+info:
+  title: VMT Meetings
+  version: '1.0'
+servers:
+  - url: https://api2.voicemailtel.com
+    description: Production url
+
+paths:
+  /api/check-api-key-validity:
+    get:
+      summary: Checks Api Key validity
+      parameters:
+        - in: header
+          name: ApiKey
+          schema:
+            type: string
+          required: true
+      tags:
+        - integrations
+      responses:
+        '200':
+          description: Gets room status
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CheckApiKeyValiditySuccessResponse'
+        '401':
+          description: Api Key is missing or invalid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CheckApiKeyValidityUnauthorizedResponse'
+          
+  /api/trigger-start-meeting:
+    get:
+      summary: Verifies if a meeting is started with personal meetin id
+      parameters:
+        - in: header
+          name: ApiKey
+          schema:
+            type: string
+          required: true
+      tags:
+        - integrations
+      responses:
+        '200':
+          description: Gets room status
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StartMeetingTriggerSuccessResponse'
+        '401':
+          description: Api Key is missing or invalid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StartMeetingTriggerUnauthorized'
+
+  /api/trigger-add-contact:
+    get:
+      summary: Gets user contacts based on ApiKey
+      parameters:
+        - in: header
+          name: ApiKey
+          schema:
+            type: string
+          required: true
+      tags:
+        - integrations
+      responses:
+        '200':
+          description: Gets user contacts
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TriggerAddContantSuccessResponse'
+        '401':
+          description: Api Key is missing or invalid!
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TriggerAddContactUnauthorizedResponse'
+
+  /api/trigger-create-group:
+    get:
+      summary: Gets groups created by the user
+      parameters:
+        - in: header
+          name: ApiKey
+          schema:
+            type: string
+          required: true
+      tags:
+        - integrations
+      responses:
+        '200':
+          description: Gets groups created by this user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TriggerCreateGroupSuccessResponse'
+        '401':
+          description: Api Key is missing or invalid!
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TriggerCreateGroupUnauthorizedResponse'
+          
+  /api/action-schedule-meeting:
+    post:
+      summary: Schedules a meeting for a user
+      parameters:
+        - in: header
+          name: ApiKey
+          schema:
+            type: string
+          required: true
+      requestBody:
+        description: Schedul meeting input
+        required: true
+        content: 
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ScheduleMeetingActionRequestBody'
+      tags:
+        - integrations
+      responses:
+        '200':
+          description: Schedules a Meeting
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScheduleMeetingActionSuccessResponse'
+        '400':
+          description: Requeired parameters are missgin
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScheduleMeetingActionBadRequestResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScheduleMeetingActionUnauthorizedResponse'
+      
+
+components:
+  schemas:
+  
+    CheckApiKeyValiditySuccessResponse:
+        type: array
+        items:
+          type: object
+          properties:
+            success:
+              type: boolean
+              example: true
+            message:
+              type: string
+              example: API Key checked!
+            isApiKeyValid:
+              type: string
+              example: true
+  
+    CheckApiKeyValidityUnauthorizedResponse:
+      type: array
+      items:
+        type: object
+        properties:
+          success:
+            type: boolean
+            example: true
+          message:
+            type: string
+            example: API Key checked!
+          isApiKeyValid:
+            type: string
+            example: false
+    
+    StartMeetingTriggerSuccessResponse:
+      type: array
+      items:
+        type: object
+        properties:
+          success:
+            type: boolean
+            example: true
+          message:
+            type: string
+            example: New meeting verification!
+          id:
+            type: string
+            example: fc176172-a1b2-47df-a2a7-dc0a7bf45368
+
+    StartMeetingTriggerUnauthorized:
+      type: array
+      items:
+        type: object
+        properties:
+          success:
+            type: boolean
+            example: false
+          message:
+            type: string
+            example: API key is missing or invalid!
+
+    TriggerAddContantSuccessResponse:
+      type: array
+      items:
+        type: object  
+        properties:
+          id:
+            type: integer
+          name: 
+            type: string
+          email: 
+            type: string
+      example:
+        - id: c16a5320fa475530d9583c34fd356ef1
+          name: example0
+          email: example0@email.com
+        - id: c16a5320fa475530d9583c34fd356ef2
+          name: Example1
+          email: example1@email.com
+        - id: c16a5320fa475530d9583c34fd356ef3
+          name: Example2
+          email: example2@email.com
+      
+    TriggerAddContactUnauthorizedResponse:
+      type: array
+      items:
+        type: object
+        properties:
+          success:
+            type: boolean
+          message:
+            type: string
+      example:
+        - success: false
+          message: Api Key missing or invalid!
+
+    TriggerCreateGroupSuccessResponse:
+      type: array
+      items:
+        type: object
+        properties:
+          id:
+            type: integer
+          groupName:
+            type: string
+      example:
+        - id: 06138bc5af6023646ede0e1f7c1eac70
+          groupName: Group0
+        - id: 06138bc5af6023646ede0e1f7c1eac71
+          groupName: Group1
+          
+    TriggerCreateGroupUnauthorizedResponse:
+      type: array
+      items:
+        type: object
+        properties:
+          success:
+            type: boolean
+          message:
+            type: string
+      example:
+        - success: false
+          message: Api Key missing or invalid!
+
+    ScheduleMeetingActionRequestBody:
+      properties:
+        meetingSubject: 
+          type: string
+          example: test
+        meetingPassword:
+          type: string
+          example: 123123
+        meetingStart:
+          type: string
+          example: 2021-07-09T:15:00-05:00
+        meetingDuration:
+          type: integer
+          example: 120
+        meetingTimezone:
+          type: string
+          example: Europe/Bucharest
+
+    ScheduleMeetingActionSuccessResponse:
+      type: array
+      items:
+        type: object
+        properties:
+          success:
+            type: boolean
+            example: true
+          message:
+            type: string
+            example: Your meeting has been scheduled successfully!
+          
+    ScheduleMeetingActionUnauthorizedResponse:
+      type: array
+      items:
+        type: object
+        properties:
+          success:
+            type: boolean
+            example: false
+          message:
+            type: string
+            example: API key is missing or invalid!
+
+    ScheduleMeetingActionBadRequestResponse:
+      type: array
+      items:
+        type: object
+        properties:
+          success: 
+            type: boolean
+            example: false
+          message:
+            type: string
+            example: Required parameters missing!
+            
